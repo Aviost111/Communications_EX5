@@ -12,7 +12,7 @@ def packet_callback(packet):
     # Extract the protocol number from the IP header
     protocol = packet[IP].proto
     # Get the current timestamp
-    # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f') HJHKJHJKHJKHKJ
     timestamp = time.time()-myTime
     # Extract the source and destination IP addresses
     source_ip = packet[IP].src
