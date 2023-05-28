@@ -1,3 +1,5 @@
+import time
+
 from scapy.all import *
 from datetime import datetime
 
