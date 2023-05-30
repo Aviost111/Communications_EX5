@@ -69,11 +69,12 @@
 #
 #
 #
-from pyatspi import interface
+# from pyatspi import interface
 from scapy.all import *
 from datetime import datetime
 
 from scapy.contrib.igmp import IGMP
+from scapy.layers.http import HTTPResponse
 from scapy.layers.inet import IP, TCP, UDP, ICMP
 
 #
@@ -165,6 +166,15 @@ from scapy.layers.inet import IP, TCP, UDP, ICMP
 #         sys.exit(1)
 #
 
+# Running a sniffer program often requires root privileges because:
+# todo this is question 1
+# 1. Raw socket access and promiscuous mode are restricted to privileged users.
+# 2. Without root privilege, the program may fail to capture packets or encounter permission denied errors.
+# 3. Advanced features may be limited or unavailable without root privilege.
+#
+# Running a sniffer program without root privilege may result in limited functionality,
+# insufficient packet capture, and permission denied errors.
+
 # Define a callback function to process each captured packet
 def packet_callback(packet):
     if IP not in packet:
@@ -188,11 +198,16 @@ def packet_callback(packet):
         source_port = packet[TCP].sport
         dest_port = packet[TCP].dport
         data = packet[TCP].payload
-        cache_flag = packet[TCP].flags.C
+        cache_flag = packet[TCP].options
         steps_flag = packet[TCP].flags.S
-        type_flag = packet[TCP].flags.F
-        status_code = packet[TCP].flags.A
-        cache_control = packet[TCP].sprintf("%TCP.flags%")
+        type_flag = packet[TCP].sprintf("%TCP.flags%")
+        status_code = None
+        cache_control = None
+        if packet.haslayer(HTTPResponse):
+            http_layer = packet[HTTPResponse]
+            status_code = http_layer.Status_Code
+            cache_control = http_layer.Cache_Control
+
         # Write the extracted information to an output file in append mode
         with open('output.txt', 'a+') as f:
             f.write(
