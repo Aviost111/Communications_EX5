@@ -24,13 +24,13 @@ from scapy.layers.inet import IP, ICMP, UDP, TCP
 
 def general_spoof(src_ip, dst_ip, payload, protocol):
     packet = None
-    if (protocol.upper() == "UDP"):
+    if protocol.upper() == "UDP":
         src_port = 47374
         dst_port = 443
         packet = IP(src=src_ip, dst=dst_ip) / UDP(sport=src_port, dport=dst_port) / payload
-    elif (protocol.upper() == "ICMP"):
+    elif protocol.upper() == "ICMP":
         packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
-    elif (protocol.upper() == "TCP"):
+    elif protocol.upper() == "TCP":
         src_port = 47374
         dst_port = 443
         packet = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port) / payload

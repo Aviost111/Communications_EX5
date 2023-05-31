@@ -77,6 +77,7 @@ from scapy.contrib.igmp import IGMP
 from scapy.layers.http import HTTPResponse
 from scapy.layers.inet import IP, TCP, UDP, ICMP
 
+
 #
 # # Define a callback function to process each captured packet
 # def packet_callback(packet):
@@ -228,6 +229,7 @@ def packet_callback(packet):
 
     # Print a brief summary of the packet on the screen
     print(packet.summary())
+
 
 if __name__ == "__main__":
     try:
