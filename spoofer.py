@@ -1,35 +1,23 @@
-# import argparse
-# from scapy.all import *
-# from scapy.layers.inet import IP, ICMP, UDP, TCP
-#
-#
-# def spoof_packet(protocol, source_ip, target_ip, source_port, target_port, payload):
-#     if protocol.lower() == 'icmp':
-#         packet = IP(src=source_ip, dst=target_ip) / ICMP() / payload
-#     elif protocol.lower() == 'udp':
-#         packet = IP(src=source_ip, dst=target_ip) / UDP(sport=source_port, dport=target_port) / payload
-#     elif protocol.lower() == 'tcp':
-#         packet = IP(src=source_ip, dst=target_ip) / TCP(sport=source_port, dport=target_port) / payload
-#     else:
-#         raise ValueError("Invalid protocol. Supported protocols are ICMP, UDP, and TCP.")
-#
-#     send(packet)
-#
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser(description="Packet Spoofer")
-#     parser.add_argument("protocol", help="Protocol to use (ICMP, UDP, or TCP)")
-#     parser.add_argument("source_ip", help="Fake source IP address")
-#     parser.add_argument("target_ip", help="Target IP address")
-#     parser.add_argument("--source_port", type=int, default=None, help="Source port (for UDP and TCP)")
-#     parser.add_argument("--target_port", type=int, default=None, help="Target port (for UDP and TCP)")
-#     parser.add_argument("--payload", default="Hello, World!", help="Payload data")
-#
-#     args = parser.parse_args()
-#
-#     if args.protocol.lower() in ['udp', 'tcp'] and (args.source_port is None or args.target_port is None):
-#         parser.error("Source port and target port are required for UDP and TCP.")
-#
-#     spoof_packet(args.protocol, args.source_ip, args.target_ip, args.source_port, args.target_port, args.payload)
+# TODO Q1
+# Can you set the IP packet length field to an arbitrary value, regardless of how big the actual packet is?
+# No, it is not possible to set the IP packet length field to an arbitrary value regardless of the actual packet size.
+# The IP packet length field is a 16-bit field in the IP header,
+# which allows for a maximum value of 65,535 bytes.
+# The value in this field specifies the total length of the IP packet, including the IP header and the data payload.
+# The IP packet length should reflect the actual length of the packet being sent.
+# If the length field is set to a value smaller than the actual packet size,
+# it will result in the packet being truncated, and some data may be lost. On the other hand,
+# if the length field is set to a value larger than the actual packet size, it will result in an invalid packet,
+# and it may be dropped or rejected by the network devices.
+# Therefore, it is important to ensure that the IP packet length field accurately reflects
+# the size of the packet to avoid any issues with packet transmission and processing.
+
+# TODO Q2
+# if you are working with a low-level socket API that allows you to have more control over the packet construction,
+# such as using raw sockets directly, you may need to calculate the IP header checksum yourself.
+# In this case, you would need to correctly compute the checksum based on the fields in the IP header,
+# including the source and destination IP addresses, protocol number, and packet length.
+# The calculation typically involves a specific algorithm, such as the Internet Checksum algorithm.
 from scapy.all import *
 from scapy.layers.inet import IP, ICMP, UDP, TCP
 
