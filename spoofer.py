@@ -18,60 +18,92 @@
 # In this case, you would need to correctly compute the checksum based on the fields in the IP header,
 # including the source and destination IP addresses, protocol number, and packet length.
 # The calculation typically involves a specific algorithm, such as the Internet Checksum algorithm.
+
+from scapy.all import *
+from scapy.layers.inet import IP, ICMP, UDP, TCP
+
+#
+# def general_spoof(src_ip, dst_ip, payload, protocol):
+#     packet = None
+#     if protocol.upper() == "UDP":
+#         src_port = 47374
+#         dst_port = 443
+#         packet = IP(src=src_ip, dst=dst_ip) / UDP(sport=src_port, dport=dst_port) / payload
+#     elif protocol.upper() == "ICMP":
+#         packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
+#     elif protocol.upper() == "TCP":
+#         src_port = 47374
+#         dst_port = 443
+#         packet = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port) / payload
+#     send(packet)
+#
+#
+# def icmp_spoof(src_ip, dst_ip, payload):
+#     packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
+#     send(packet)
+#
+#
+# def udp_spoof(src_ip, dst_ip, src_port, dst_port, payload):
+#     packet = IP(src=src_ip, dst=dst_ip) / UDP(sport=src_port, dport=dst_port) / payload
+#     send(packet)
+#
+#
+# def tcp_spoof(src_ip, dst_ip, src_port, dst_port, payload):
+#     packet = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port) / payload
+#     send(packet)
+#
+#
+# if __name__ == "__main__":
+#     protocol = input("Enter the protocol (ICMP, UDP, TCP): ").upper()
+#     src_ip = input("Enter the source IP address: ")
+#     dst_ip = input("Enter the destination IP address: ")
+#     payload = input("Enter the payload: ")
+#
+#     general_spoof(src_ip, dst_ip, payload, protocol)
+#     # if protocol == "ICMP":
+#     #     icmp_spoof(src_ip, dst_ip, payload)
+#     # elif protocol == "UDP":
+#     #     src_port = int(input("Enter the source port: "))
+#     #     dst_port = int(input("Enter the destination port: "))
+#     #     udp_spoof(src_ip, dst_ip, src_port, dst_port, payload)
+#     # elif protocol == "TCP":
+#     #     src_port = int(input("Enter the source port: "))
+#     #     dst_port = int(input("Enter the destination port: "))
+#     #     tcp_spoof(src_ip, dst_ip, src_port, dst_port, payload)
+#     # else:
+#     #     print("Invalid protocol. Please enter ICMP, UDP, or TCP.")
+
 from scapy.all import *
 from scapy.layers.inet import IP, ICMP, UDP, TCP
 
 
 def general_spoof(src_ip, dst_ip, payload, protocol):
     packet = None
-    if protocol.upper() == "UDP":
-        src_port = 47374
-        dst_port = 443
+    src_port = 47374
+    dst_port = 443
+
+    # Validate protocol input
+    protocol = protocol.upper()
+    if protocol not in ["UDP", "ICMP", "TCP"]:
+        raise ValueError("Invalid protocol. Supported protocols are UDP, ICMP, and TCP.")
+
+    # Create packet based on protocol
+    if protocol == "UDP":
         packet = IP(src=src_ip, dst=dst_ip) / UDP(sport=src_port, dport=dst_port) / payload
-    elif protocol.upper() == "ICMP":
-        packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
-    elif protocol.upper() == "TCP":
-        src_port = 47374
-        dst_port = 443
+    elif protocol == "ICMP":
+        packet = IP(src=src_ip, dst=dst_ip) / ICMP()
+        # packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
+    elif protocol == "TCP":
         packet = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port) / payload
+
+    # Send packet
     send(packet)
 
 
-def icmp_spoof(src_ip, dst_ip, payload):
-    packet = IP(src=src_ip, dst=dst_ip) / ICMP() / payload
-    send(packet)
-
-
-def udp_spoof(src_ip, dst_ip, src_port, dst_port, payload):
-    packet = IP(src=src_ip, dst=dst_ip) / UDP(sport=src_port, dport=dst_port) / payload
-    send(packet)
-
-
-def tcp_spoof(src_ip, dst_ip, src_port, dst_port, payload):
-    packet = IP(src=src_ip, dst=dst_ip) / TCP(sport=src_port, dport=dst_port) / payload
-    send(packet)
-
-
-def main():
+if __name__ == "__main__":
     protocol = input("Enter the protocol (ICMP, UDP, TCP): ").upper()
     src_ip = input("Enter the source IP address: ")
     dst_ip = input("Enter the destination IP address: ")
     payload = input("Enter the payload: ")
 
     general_spoof(src_ip, dst_ip, payload, protocol)
-    # if protocol == "ICMP":
-    #     icmp_spoof(src_ip, dst_ip, payload)
-    # elif protocol == "UDP":
-    #     src_port = int(input("Enter the source port: "))
-    #     dst_port = int(input("Enter the destination port: "))
-    #     udp_spoof(src_ip, dst_ip, src_port, dst_port, payload)
-    # elif protocol == "TCP":
-    #     src_port = int(input("Enter the source port: "))
-    #     dst_port = int(input("Enter the destination port: "))
-    #     tcp_spoof(src_ip, dst_ip, src_port, dst_port, payload)
-    # else:
-    #     print("Invalid protocol. Please enter ICMP, UDP, or TCP.")
-
-
-if __name__ == "__main__":
-    main()
