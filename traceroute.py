@@ -10,6 +10,7 @@ def traceroute(destination, max_hops=30):
         destination (str): The destination IP address or hostname.
         max_hops (int): Maximum number of hops to try before stopping.
     """
+
     ttl = 1
     dst_reached = False
 

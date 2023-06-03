@@ -4,15 +4,6 @@ from scapy.layers.http import HTTPResponse
 from scapy.layers.inet import IP, TCP, UDP, ICMP
 
 
-# Running a sniffer program often requires root privileges because:
-# todo this is question 1
-# 1. Raw socket access and promiscuous mode are restricted to privileged users.
-# 2. Without root privilege, the program may fail to capture packets or encounter permission denied errors.
-# 3. Advanced features may be limited or unavailable without root privilege.
-#
-# Running a sniffer program without root privilege may result in limited functionality,
-# insufficient packet capture, and permission denied errors.
-
 def packet_callback(packet):
     # Check if the packet has an IP layer
     if IP in packet:
@@ -54,7 +45,7 @@ def packet_callback(packet):
             data = hexstr(packet[Raw])
 
         # Write the extracted information to an output file in append mode
-        with open('output.txt', 'a+') as f:
+        with open('327341590_206996381.txt', 'a+') as f:
             f.write(
                 f"{{ source_ip: {source_ip}, dest_ip: {dest_ip}, source_port: {source_port}, dest_port: {dest_port},"
                 f" timestamp: {timestamp}, total_length: {total_length}, cache_flag: {cache_flag}, "
@@ -67,13 +58,13 @@ def packet_callback(packet):
 if __name__ == "__main__":
     try:
         # Delete the output file if it exists
-        if os.path.exists('output.txt'):
-            os.remove('output.txt')
+        if os.path.exists('327341590_206996381.txt'):
+            os.remove('327341590_206996381.txt')
 
         print("Starting sniffer...")
         packets = sniff(filter="tcp port 9999", prn=packet_callback, iface='lo')
         # Save the captured packets to a pcap file using wrpcap function
-        wrpcap('packets.pcap', packets)
+        wrpcap('Task_a.pcap', packets)
 
     except Exception as e:
         # Catch any exceptions that might occur and print the error message
@@ -82,3 +73,15 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Finsh sniffing.")
         exit()
+
+"""
+-----------Question 1 ---------------
+Running a sniffer program often requires root privileges because:
+
+1. Raw socket access and promiscuous mode are restricted to privileged users.
+2. Without root privilege, the program may fail to capture packets or encounter permission denied errors.
+3. Advanced features may be limited or unavailable without root privilege.
+
+Running a sniffer program without root privilege may result in limited functionality,
+insufficient packet capture, and permission denied errors.
+"""
