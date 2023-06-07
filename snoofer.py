@@ -26,4 +26,5 @@ def sniff_and_spoof(pkt):
 
 
 # Start sniffing packets on the LAN
-sniff(filter="icmp", prn=sniff_and_spoof, store=0)
+packets = sniff(filter="icmp", prn=sniff_and_spoof)
+wrpcap(packets, "snoofer_packets")
