@@ -18,10 +18,6 @@ def sniff_and_spoof(pkt):
         # Create a new packet with the spoofed source IP address
         spoofed_pkt = IP(src=fake_ip, dst=target_ip, ttl=pkt[IP].ttl, id=pkt[IP].id) / ICMP(type=0, id=pkt[ICMP].id,
                                                                                             seq=pkt[ICMP].seq) / pkt[Raw].load
-        # Add padding to the spoofed packet to make it the same size as the original packet
-        #padding_len = len(pkt) - len(spoofed_pkt)
-        #if padding_len > 0:
-        #    spoofed_pkt = spoofed_pkt / Raw(load="X" * padding_len)
         # Send the spoofed packet
         send(spoofed_pkt, verbose=False)
         print("Sent spoof")
