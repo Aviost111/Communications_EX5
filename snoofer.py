@@ -39,6 +39,7 @@ def sniff_and_spoof(pkt):
         print("sent spoof")
         # Print a message to indicate that a packet has been spoofed
         print("Spoofed packet sent: {} -> {}".format(spoofed_pkt[IP].src, spoofed_pkt[IP].dst))
+        print("..................................................")
 
 
 if __name__ == "__main__":
