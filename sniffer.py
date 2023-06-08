@@ -62,7 +62,7 @@ if __name__ == "__main__":
             os.remove('327341590_206996381.txt')
 
         print("Starting sniffer...")
-        packets = sniff(filter="tcp port 9999", prn=packet_callback, iface='br-')
+        packets = sniff(filter="tcp port 9999", prn=packet_callback, iface='lo')
         # Save the captured packets to a pcap file using wrpcap function
         wrpcap('Task_a.pcap', packets)
 
